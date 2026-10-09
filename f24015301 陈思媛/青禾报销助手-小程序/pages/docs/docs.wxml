@@ -1,0 +1,157 @@
+<view class="docs-head">
+  <view class="row-between">
+    <view class="flex-1">
+      <view class="hero-title">单据查询</view>
+      <view class="hero-sub">{{scopeLabel}}</view>
+    </view>
+    <view class="auth-chip" bindtap="onShowConsent">授权说明</view>
+  </view>
+
+  <view class="stat-strip">
+    <view class="strip-cell">
+      <text class="strip-num">{{stats.total}}</text>
+      <text class="strip-label">单据</text>
+    </view>
+    <view class="strip-divider"></view>
+    <view class="strip-cell">
+      <text class="strip-num">{{stats.doing}}</text>
+      <text class="strip-label">在办</text>
+    </view>
+    <view class="strip-divider"></view>
+    <view class="strip-cell">
+      <text class="strip-num">{{stats.done}}</text>
+      <text class="strip-label">已完成</text>
+    </view>
+    <view class="strip-divider"></view>
+    <view class="strip-cell">
+      <text class="strip-num strip-amount">{{stats.amountText}}</text>
+      <text class="strip-label">金额合计</text>
+    </view>
+  </view>
+</view>
+
+<view class="filter-wrap docs-filter">
+  <scroll-view class="chips" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="chip {{activeFilter === item.key ? 'chip-on' : ''}}"
+      bindtap="onPickFilter"
+      data-key="{{item.key}}"
+    >{{item.label}}</view>
+  </scroll-view>
+</view>
+
+<view class="page-body">
+  <view wx:if="{{isStaff && pendingVerify > 0}}" class="notice notice-warn mt-8">
+    <text class="notice-icon">!</text>
+    <view class="flex-1">
+      有 {{pendingVerify}} 条单据等待核对业务事实。金额、事由与凭证的认定以你的核对结论为准，核对后可推进单据状态。
+    </view>
+  </view>
+
+  <view
+    wx:for="{{list}}"
+    wx:key="id"
+    class="card doc-card"
+    hover-class="card-press"
+    bindtap="goDetail"
+    data-id="{{item.id}}"
+  >
+    <view class="row-between">
+      <view class="row gap-12 flex-1">
+        <text class="tag tag-grey">{{item.docType}}</text>
+        <text wx:if="{{item.showOwner}}" class="t-xs t-muted">{{item.ownerName}} · {{item.ownerDept}}</text>
+      </view>
+      <text class="tag {{item.statusTag}}">{{item.statusLabel}}</text>
+    </view>
+
+    <view class="row-between mt-16">
+      <text class="doc-amount amount">¥{{item.amountText}}</text>
+      <text class="t-xs t-muted">{{item.submittedLabel}}提交</text>
+    </view>
+
+    <view class="t-sm t-sub clamp-2 mt-12">{{item.reason}}</view>
+
+    <view class="dashed-divider"></view>
+    <view class="row-between">
+      <text class="t-xs t-muted">{{item.docNo}}</text>
+      <text wx:if="{{item.factVerified}}" class="fact-ok">✓ 业务事实已由{{item.verifiedBy}}核对</text>
+      <text wx:else class="fact-wait">待财务核对业务事实</text>
+    </view>
+  </view>
+
+  <view wx:if="{{list.length === 0}}" class="card">
+    <view class="empty">
+      <view class="empty-title">{{isStaff ? '暂无单据' : '你名下还没有单据'}}</view>
+      <view class="empty-desc">
+        {{isStaff
+          ? '员工提交报销单据后，会在这里汇入待核对队列。'
+          : '提交报销单据后，可以在这里跟踪审核与打款进度。也可以先载入几条示例数据体验完整流程。'}}
+      </view>
+      <view wx:if="{{!isStaff}}" class="btn btn-primary-plain btn-sm empty-btn" bindtap="onLoadSamples">载入示例单据</view>
+    </view>
+  </view>
+
+  <view wx:if="{{list.length > 0 && !isStaff}}" class="t-xs t-muted row-center mt-28" bindtap="onLoadSamples">
+    再载入几条示例单据 ›
+  </view>
+
+  <view class="foot-note">
+    单据状态以系统流转记录为准；金额、事由与凭证的认定，以财务专员周敏的核对结论为准。
+    制度口径问题请查阅现行制度或咨询行政专员乔姐。
+  </view>
+</view>
+
+<view wx:if="{{showConsent}}" class="mask" bindtap="onConsentRefuse"></view>
+<view wx:if="{{showConsent}}" class="sheet">
+  <view class="sheet-head">
+    <view class="t-lg t-bold">单据查询授权说明</view>
+    <view class="t-xs t-muted mt-8">授权后才能展示单据进度</view>
+  </view>
+  <scroll-view class="sheet-body" scroll-y>
+    <view class="consent-block">
+      <view class="consent-title">需要读取</view>
+      <view class="consent-item">
+        <text class="dot dot-green"></text>
+        <text class="flex-1 t-sm t-sub">你本人名下提交的报销单据（单号、类型、金额、事由、状态）</text>
+      </view>
+      <view class="consent-item">
+        <text class="dot dot-green"></text>
+        <text class="flex-1 t-sm t-sub">上述单据的流转记录（提交、部门审核、财务核对、打款）</text>
+      </view>
+    </view>
+
+    <view class="consent-block">
+      <view class="consent-title">不会做</view>
+      <view class="consent-item">
+        <text class="dot dot-grey"></text>
+        <text class="flex-1 t-sm t-sub">不会读取或展示他人的单据（财务专员核对业务事实的情形除外）</text>
+      </view>
+      <view class="consent-item">
+        <text class="dot dot-grey"></text>
+        <text class="flex-1 t-sm t-sub">不会改动任何单据的金额、事由与状态</text>
+      </view>
+      <view class="consent-item">
+        <text class="dot dot-grey"></text>
+        <text class="flex-1 t-sm t-sub">不会替代财务对业务事实的认定</text>
+      </view>
+    </view>
+
+    <view class="notice mt-20">
+      <text class="notice-icon">i</text>
+      <view class="flex-1">
+        单据状态以系统流转记录为准；金额、事由与凭证的认定，以财务专员周敏的核对结论为准。
+        你可以随时在「我的」中撤回此授权。
+      </view>
+    </view>
+
+    <view wx:if="{{consent && consent.granted}}" class="t-xs t-muted mt-20">
+      当前状态：已授权（仅限本人单据）
+    </view>
+  </scroll-view>
+  <view class="sheet-foot">
+    <view class="btn btn-quiet flex-1" bindtap="onConsentRefuse">稍后再说</view>
+    <view class="btn btn-primary flex-1" bindtap="onConsentAgree">同意并继续</view>
+  </view>
+</view>

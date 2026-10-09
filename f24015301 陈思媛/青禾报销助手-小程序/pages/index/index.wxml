@@ -1,0 +1,201 @@
+<view class="hero">
+  <view class="row-between">
+    <view class="flex-1">
+      <view class="hero-title">青禾报销助手</view>
+      <view class="hero-sub">制度口径 · 单据进度，一处查清</view>
+    </view>
+  </view>
+
+  <view class="id-pill" bindtap="goMe">
+    <text class="id-avatar">{{identity.name}}</text>
+    <text class="id-text">{{roleLabel}}</text>
+    <text class="id-sep">|</text>
+    <text class="id-text">{{identity.employeeNo}}</text>
+    <text class="id-arrow">›</text>
+  </view>
+</view>
+
+<view class="page-body pt-0">
+  <view class="hero-pull">
+    <view class="search-bar" bindtap="goAsk">
+      <view class="icon-search"></view>
+      <input
+        class="search-input"
+        placeholder="问制度，如「出差住宿能报多少」"
+        placeholder-class="input-placeholder"
+        value="{{keyword}}"
+        bindinput="onKeywordInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+      <view class="search-btn" catchtap="onSearch">问一问</view>
+    </view>
+  </view>
+
+  <view class="card mt-20">
+    <view class="grid">
+      <view class="grid-item" bindtap="goPolicy">
+        <view class="grid-icon gi-green">制</view>
+        <text class="grid-text">制度库</text>
+      </view>
+      <view class="grid-item" bindtap="goAsk">
+        <view class="grid-icon gi-blue">问</view>
+        <text class="grid-text">制度问答</text>
+      </view>
+      <view class="grid-item" bindtap="goDocs">
+        <view class="grid-icon gi-orange">单</view>
+        <text class="grid-text">我的单据</text>
+      </view>
+      <view wx:if="{{isStaff}}" class="grid-item" bindtap="goStaffDesk">
+        <view class="grid-icon gi-plum">{{isAdmin ? '维' : '核'}}</view>
+        <text class="grid-text">{{isAdmin ? '制度维护' : '财务核对'}}</text>
+      </view>
+      <view wx:else class="grid-item" bindtap="goMe">
+        <view class="grid-icon gi-grey">权</view>
+        <text class="grid-text">授权与身份</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{isStaff}}" class="notice notice-info mt-20">
+    <text class="notice-icon">i</text>
+    <view class="flex-1">
+      <text wx:if="{{isAdmin}}">你是行政专员，可进入「制度维护」新增、改版或停用制度；员工问答只采用现行有效版本。</text>
+      <text wx:else>你是财务专员，可进入「财务核对」核对单据业务事实；核对结论将同步到员工的单据详情。</text>
+    </view>
+  </view>
+
+  <view class="section-title">
+    现行有效制度
+    <text class="sub">共 {{policyCount}} 部 · 只显示生效中版本</text>
+  </view>
+
+  <view
+    wx:for="{{latestPolicies}}"
+    wx:key="id"
+    class="card policy-card mt-16"
+    hover-class="card-press"
+    bindtap="goPolicyDetail"
+    data-id="{{item.id}}"
+  >
+    <view class="row-between">
+      <text class="t-lg t-bold flex-1 ellipsis">{{item.title}}</text>
+      <text class="tag tag-brand">{{item.version}}</text>
+    </view>
+    <view class="row gap-12 mt-12">
+      <text class="tag tag-grey">{{item.code}}</text>
+      <text class="tag tag-grey">{{item.category}}</text>
+    </view>
+    <view class="t-sm t-muted clamp-2 mt-12">{{item.summary}}</view>
+    <view class="dashed-divider"></view>
+    <view class="row-between">
+      <text class="t-xs t-muted">{{item.effectiveDate}} 起生效 · {{item.clauseCount}} 条条款</text>
+      <text class="t-xs t-brand">查看全文 ›</text>
+    </view>
+  </view>
+
+  <view class="t-xs t-muted row-center mt-16" bindtap="goPolicy">
+    <text>查看全部 {{policyCount}} 部有效制度</text>
+    <text class="t-brand"> ›</text>
+  </view>
+
+  <block wx:if="{{!isStaff}}">
+    <view class="section-title">
+      我的单据
+      <text class="sub">仅本人可见</text>
+    </view>
+    <view class="card">
+      <view class="row stat-row">
+        <view class="stat-cell" bindtap="goDocs">
+          <text class="stat-num">{{myStats.total}}</text>
+          <text class="stat-label">全部单据</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell" bindtap="goDocs">
+          <text class="stat-num t-warn">{{myStats.doing}}</text>
+          <text class="stat-label">在办中</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell" bindtap="goDocs">
+          <text class="stat-num t-brand">{{myStats.done}}</text>
+          <text class="stat-label">已完成</text>
+        </view>
+      </view>
+      <view wx:if="{{myStats.total === 0}}" class="dashed-divider"></view>
+      <view wx:if="{{myStats.total === 0}}" class="t-xs t-muted">还没有单据记录，进入「我的单据」可载入示例数据先体验。</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section-title">
+      财务待办
+      <text class="sub">待核对业务事实</text>
+    </view>
+    <view class="card" bindtap="goStaffDesk">
+      <view class="row stat-row">
+        <view class="stat-cell">
+          <text class="stat-num t-warn">{{financeTodo.pendingCount}}</text>
+          <text class="stat-label">待核对</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-num">{{financeTodo.approvedCount}}</text>
+          <text class="stat-label">待打款</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-num">{{policyCount}}</text>
+          <text class="stat-label">有效制度</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="section-title">
+    热门问题
+    <text class="sub">点击直接提问</text>
+  </view>
+  <view class="card">
+    <view
+      wx:for="{{hotQuestions}}"
+      wx:key="*this"
+      class="hot-q"
+      hover-class="card-press"
+      bindtap="onAskHot"
+      data-q="{{item}}"
+    >
+      <text class="hot-q-mark">Q</text>
+      <text class="flex-1 t-md">{{item}}</text>
+      <view class="chev"></view>
+    </view>
+  </view>
+
+  <view class="section-title">口径与责任</view>
+  <view class="card">
+    <view class="duty-row">
+      <view class="duty-badge db-green">制</view>
+      <view class="flex-1">
+        <view class="t-md t-bold">制度口径 · 乔姐</view>
+        <view class="t-sm t-muted mt-8">行政专员，负责制度的制定、改版与停用。员工问答只采用现行有效版本。</view>
+      </view>
+    </view>
+    <view class="divider"></view>
+    <view class="duty-row">
+      <view class="duty-badge db-plum">核</view>
+      <view class="flex-1">
+        <view class="t-md t-bold">业务事实 · 周敏</view>
+        <view class="t-sm t-muted mt-8">财务专员，负责单据业务事实的核对与确认；金额、事由、凭证以她的核对结论为准。</view>
+      </view>
+    </view>
+    <view class="divider"></view>
+    <view class="duty-row">
+      <view class="duty-badge db-blue">界</view>
+      <view class="flex-1">
+        <view class="t-md t-bold">助手的边界</view>
+        <view class="t-sm t-muted mt-8">助手只做检索与呈现，不修改制度口径，也不替代财务对业务事实的认定。</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="t-xs t-muted row-center mt-28" bindtap="goMe">青禾报销助手 · 本地体验模式</view>
+</view>

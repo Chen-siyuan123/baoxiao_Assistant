@@ -1,0 +1,125 @@
+.filter-wrap {
+  background: #FFFFFF;
+  padding: 24rpx 28rpx 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(20, 60, 50, 0.05);
+}
+
+.filter-wrap .search-bar {
+  box-shadow: none;
+  background: #F5F8F7;
+}
+
+.clear-btn {
+  font-size: 24rpx;
+  color: #A6B4B0;
+  padding: 0 6rpx;
+}
+
+/* ---------- 分类 chips ---------- */
+.chips {
+  white-space: nowrap;
+  margin-top: 20rpx;
+  display: flex;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 10rpx 24rpx;
+  border-radius: 100rpx;
+  background: #F2F6F5;
+  color: #566763;
+  font-size: 24rpx;
+  margin-right: 14rpx;
+}
+
+.chip-on {
+  background: #1F8A70;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* ---------- 开关 ---------- */
+.switch {
+  width: 62rpx;
+  height: 34rpx;
+  border-radius: 100rpx;
+  background: #DCE4E2;
+  padding: 4rpx;
+  box-sizing: border-box;
+  transition: background 0.15s ease;
+}
+
+.switch-on {
+  background: #5FBFA3;
+}
+
+.switch-dot {
+  width: 26rpx;
+  height: 26rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  transition: transform 0.15s ease;
+}
+
+.switch-on .switch-dot {
+  transform: translateX(28rpx);
+}
+
+/* ---------- 制度条目 ---------- */
+.policy-item {
+  margin-top: 20rpx;
+  border-left: 8rpx solid #DCEBE6;
+}
+
+.policy-item-off {
+  border-left-color: #E6EBEA;
+  opacity: 0.72;
+}
+
+.chip-row {
+  flex-wrap: wrap;
+}
+
+.empty-btn {
+  display: inline-flex;
+  margin-top: 26rpx;
+  padding: 0 40rpx;
+}
+
+.foot-note {
+  font-size: 22rpx;
+  color: #9AA8A4;
+  line-height: 1.7;
+  text-align: center;
+  padding: 40rpx 30rpx 20rpx;
+}
+
+/* ---------- 悬浮按钮 ---------- */
+.fab {
+  position: fixed;
+  right: 32rpx;
+  bottom: calc(56rpx + env(safe-area-inset-bottom));
+  background: #1F8A70;
+  color: #FFFFFF;
+  height: 88rpx;
+  padding: 0 32rpx 0 24rpx;
+  border-radius: 100rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 27rpx;
+  font-weight: 600;
+  box-shadow: 0 10rpx 28rpx rgba(31, 138, 112, 0.34);
+  z-index: 30;
+}
+
+.fab-plus {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.fab:active {
+  opacity: 0.9;
+}

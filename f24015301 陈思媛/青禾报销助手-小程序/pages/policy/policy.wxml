@@ -1,0 +1,93 @@
+<view class="filter-wrap">
+  <view class="search-bar">
+    <view class="icon-search"></view>
+    <input
+      class="search-input"
+      placeholder="搜索制度名称或条款关键词"
+      placeholder-class="input-placeholder"
+      value="{{keyword}}"
+      bindinput="onKeywordInput"
+      confirm-type="search"
+    />
+    <text wx:if="{{keyword}}" class="clear-btn" bindtap="onClearKeyword">✕</text>
+  </view>
+
+  <scroll-view class="chips" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view class="chip {{category === '' ? 'chip-on' : ''}}" bindtap="onPickCategory" data-name="">全部 {{activeCount}}</view>
+    <view
+      wx:for="{{categories}}"
+      wx:key="name"
+      class="chip {{category === item.name ? 'chip-on' : ''}}"
+      bindtap="onPickCategory"
+      data-name="{{item.name}}"
+    >{{item.name}} {{item.count}}</view>
+  </scroll-view>
+
+  <view class="row-between mt-16">
+    <text class="t-xs t-muted">共 {{list.length}} 条结果</text>
+    <view class="row gap-8" bindtap="onToggleArchived">
+      <view class="switch {{includeArchived ? 'switch-on' : ''}}">
+        <view class="switch-dot"></view>
+      </view>
+      <text class="t-xs t-muted">含已失效制度（{{archivedCount}}）</text>
+    </view>
+  </view>
+</view>
+
+<view class="page-body">
+  <view wx:if="{{!includeArchived}}" class="notice mt-8">
+    <text class="notice-icon">✓</text>
+    <view class="flex-1">
+      当前展示的 {{activeCount}} 部均为现行有效版本，由行政专员乔姐维护。已失效的历史版本不作为报销依据，需复核时再打开右上开关查看。
+    </view>
+  </view>
+
+  <view
+    wx:for="{{list}}"
+    wx:key="id"
+    class="card policy-item {{item.effective ? '' : 'policy-item-off'}}"
+    hover-class="card-press"
+    bindtap="goDetail"
+    data-id="{{item.id}}"
+  >
+    <view class="row-between">
+      <text class="t-lg t-bold flex-1 ellipsis">{{item.title}}</text>
+      <text class="tag {{item.statusTag}}">{{item.statusLabel}}</text>
+    </view>
+
+    <view class="row gap-8 mt-12 chip-row">
+      <text class="tag tag-grey">{{item.code}}</text>
+      <text class="tag tag-grey">{{item.version}}</text>
+      <text class="tag tag-grey">{{item.category}}</text>
+    </view>
+
+    <view class="t-sm t-muted clamp-2 mt-12">{{item.summary}}</view>
+
+    <view class="dashed-divider"></view>
+    <view class="row-between">
+      <text class="t-xs t-muted">{{item.effectiveDate}} 起生效 · {{item.clauseCount}} 条</text>
+      <text class="t-xs t-muted">乔姐 · {{item.updatedLabel}}更新</text>
+    </view>
+    <view wx:if="{{item.expireDate && !item.effective}}" class="t-xs t-muted mt-8">失效日期：{{item.expireDate}}</view>
+  </view>
+
+  <view wx:if="{{list.length === 0}}" class="card">
+    <view class="empty">
+      <view class="empty-title">没有匹配的制度</view>
+      <view class="empty-desc">
+        换个关键词试试，或者直接到「问答」里用一句话提问。
+        现行制度未覆盖的口径，建议找行政专员乔姐确认。
+      </view>
+      <view class="btn btn-primary-plain btn-sm empty-btn" bindtap="goAsk">去提问</view>
+    </view>
+  </view>
+
+  <view class="foot-note">
+    制度由行政专员乔姐维护：新增、改版、停用均以她的正式发布为准。
+  </view>
+</view>
+
+<view wx:if="{{isAdmin}}" class="fab" bindtap="goAdmin">
+  <text class="fab-plus">+</text>
+  <text>维护制度</text>
+</view>

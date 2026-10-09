@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青禾报销助手 · 交付说明</title>
+<style>
+  :root{
+    --brand:#1F8A70; --brand-soft:#E3F2EE; --plum:#6B4FA8; --plum-soft:#F0EBF8;
+    --blue:#3C63A8; --blue-soft:#E9EFF9; --warn:#C1701A; --warn-soft:#FDF3E4;
+    --ink:#1C2B28; --ink-2:#3D4D49; --ink-3:#566763; --muted:#8A9A96;
+    --line:#E6EDEB; --bg:#F2F6F5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;
+    font-size:15px;line-height:1.7;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+  header{background:linear-gradient(160deg,#1F8A70 0%,#2AA383 55%,#35B08D 100%);
+    color:#fff;padding:44px 24px 52px;margin-bottom:-28px}
+  header .inner{max-width:900px;margin:0 auto}
+  h1{margin:0;font-size:30px;letter-spacing:.5px}
+  .sub{color:rgba(255,255,255,.85);font-size:14px;margin-top:10px}
+  .pills{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.32);
+    border-radius:999px;padding:4px 14px;font-size:12.5px}
+  .card{background:#fff;border-radius:16px;padding:22px 24px;margin-top:18px;
+    box-shadow:0 4px 18px rgba(31,138,112,.06)}
+  h2{font-size:18px;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:5px;height:19px;border-radius:3px;background:var(--brand)}
+  h3{font-size:15px;margin:20px 0 8px;color:var(--ink)}
+  p{margin:8px 0;color:var(--ink-2)}
+  ul{margin:8px 0;padding-left:20px;color:var(--ink-2)}
+  li{margin:5px 0}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--ink-3);font-weight:600;background:#FAFCFB;font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+  code{background:#F1F5F4;padding:1.5px 6px;border-radius:5px;font-size:13px;color:#2A5A4D}
+  .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+  .t-brand{background:var(--brand-soft);color:var(--brand)}
+  .t-plum{background:var(--plum-soft);color:var(--plum)}
+  .t-blue{background:var(--blue-soft);color:var(--blue)}
+  .t-warn{background:var(--warn-soft);color:var(--warn)}
+  .t-grey{background:#EEF2F1;color:#6B7B77}
+  .notice{display:flex;gap:12px;background:#FFFBF3;border-left:4px solid #D89A3C;
+    border-radius:8px;padding:14px 16px;font-size:13.5px;color:#6B5A3C;margin-top:16px}
+  .notice i{font-style:normal;font-weight:700;color:#D89A3C}
+  .notice-ok{background:#F2FAF6;border-left-color:var(--brand);color:#2A5A4D}
+  .notice-ok i{color:var(--brand)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .kpi{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .kpi div{flex:1;min-width:130px;background:#FAFCFB;border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px}
+  .kpi b{display:block;font-size:24px;color:var(--brand)}
+  .kpi span{font-size:12.5px;color:var(--muted)}
+  .flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:13px}
+  .step{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--ink-3)}
+  .step.on{background:var(--brand-soft);border-color:#BEDDD4;color:var(--brand);font-weight:600}
+  .arrow{color:#B6C3C0}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <h1>青禾报销助手</h1>
+    <div class="sub">员工自助查现行制度 · 经授权查本人单据状态</div>
+    <div class="pills">
+      <span class="pill">微信小程序</span>
+      <span class="pill">9 个页面</span>
+      <span class="pill">一期 + 二期已交付</span>
+      <span class="pill">本地体验模式</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2 style="margin-top:0">交付状态</h2>
+    <div class="notice">
+      <i>!</i>
+      <div>
+        <b>云服务未开启，当前为本地体验模式。</b>
+        开通云服务的确认被拒绝了，因此本次交付按本地实现完成：制度库、单据、问答留痕都保存在本机，
+        用「切换体验身份」模拟乔姐、周敏和员工三种角色。
+        这一版功能完整、可以直接走通全流程；但如果要<b>真实微信登录、多端共享数据、发布上线</b>，
+        需要重新开启云服务（我会把数据层换成云端表结构，页面代码不用改）。
+      </div>
+    </div>
+    <div class="kpi">
+      <div><b>5</b><span>部现行有效制度</span></div>
+      <div><b>6</b><span>部制度留档（含 1 部失效版）</span></div>
+      <div><b>9</b><span>个页面</span></div>
+      <div><b>42</b><span>项自检全部通过</span></div>
+    </div>
+  </div>
+
+  <h2>一、角色与职责边界</h2>
+  <div class="card">
+    <p>这是整个产品的骨架：<b>制度口径由乔姐说了算，业务事实由周敏说了算</b>，助手只做检索和呈现，不越界。</p>
+    <table>
+      <thead>
+        <tr><th>角色</th><th>人</th><th>负责什么</th><th>在小程序里能做什么</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag t-grey">员工</span></td>
+          <td>全体员工</td>
+          <td>—</td>
+          <td>自助查现行有效制度；向助手提问；经授权后查本人单据进度</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-blue">行政专员</span></td>
+          <td>乔姐</td>
+          <td><b>制度口径</b>：制定、改版、停用</td>
+          <td>制度维护台：新增制度、发布新版、设定生效日期、停用旧版、编辑条款与检索关键词</td>
+        </tr>
+        <tr>
+          <td><span class="tag t-plum">财务专员</span></td>
+          <td>周敏</td>
+          <td><b>业务事实</b>：金额、事由、凭证</td>
+          <td>业务事实核对台：待核对队列、四项核对要点、核对结论、驳回、标记已打款</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>三条不可逾越的界线</h3>
+    <ul>
+      <li><b>助手不改制度口径。</b>它只检索乔姐维护的现行有效版本；已失效版本不参与作答。</li>
+      <li><b>助手不认定业务事实。</b>单据的金额、事由、凭证以周敏的核对结论为准，页面上明确标注是否已核对。</li>
+      <li><b>只能看自己的单据。</b>员工按单据 id 直接访问他人单据会被拒绝；只有财务专员（核对业务事实）可读取全部。</li>
+    </ul>
+  </div>
+
+  <h2>二、一期：员工自助查有效制度</h2>
+  <div class="card">
+    <h3>制度库</h3>
+    <ul>
+      <li>默认<b>只显示现行有效版本</b>（状态为生效中，且今天在生效日与失效日之间）。</li>
+      <li>按分类筛选、按名称或条款关键词搜索；可手动打开开关查看已失效历史留档。</li>
+      <li>失效版本带「已失效」标记与页面警示，明确不能作为报销依据。</li>
+    </ul>
+    <h3>制度详情</h3>
+    <ul>
+      <li>展示条款正文（编号 + 标题 + 内容）、版本号、生效/失效日期、维护人（乔姐）、最近更新、修订说明。</li>
+      <li>末尾说明口径责任归属，并可直接就这条制度发起提问。</li>
+    </ul>
+    <h3>制度问答</h3>
+    <ul>
+      <li>一句话提问 → 检索现行制度条款 → 给出条款原文 + 出处卡片（制度名 / 编号 / 版本 / 生效日期 / 条款号 / 维护人）。</li>
+      <li>命中多条相关条款时一并给出；点卡片可直接跳到制度原文核对。</li>
+      <li><b>检索不到就明说</b>，不套用失效版本、不推测，并引导去找乔姐确认口径。</li>
+      <li>问答留痕只存在本人名下，可回看、可清空。</li>
+    </ul>
+    <h3>乔姐的制度维护台</h3>
+    <ul>
+      <li>新增制度；编辑条款（条款号、标题、正文、检索关键词）；设定分类、版本、生效/失效日期、状态。</li>
+      <li><b>「发布新版」</b>：复制现行版本生成新版本，保存后旧版本自动转为已失效并留档，员工问答立刻只采用新版。</li>
+      <li>停用制度；停用后该制度不再作为报销依据，也不再参与问答。</li>
+      <li>非行政专员进入会被拒，并提示联系乔姐。</li>
+    </ul>
+  </div>
+
+  <h2>三、二期：经授权查询本人单据</h2>
+  <div class="card">
+    <h3>授权先行</h3>
+    <p>第一次进入单据页会弹出授权说明，逐条列明「需要读取什么」和「不会做什么」，同意后才展示单据；可在「我的」中随时撤回。授权范围严格限定为本人名下单据及其流转记录。</p>
+
+    <h3>我的单据</h3>
+    <ul>
+      <li>列表显示单据编号、费用类型、金额、事由、状态、提交时间，以及<b>业务事实是否已经周敏核对</b>。</li>
+      <li>筛选「全部 / 在办 / 已完成」；财务专员额外有「待核对」筛选并显示提交人信息。</li>
+      <li>刚上手可以「载入示例单据」，直接体验完整流程。</li>
+    </ul>
+
+    <h3>单据详情</h3>
+    <ul>
+      <li>金额、状态与状态说明；完整流转时间轴（提交申请 → 部门审核 → 财务核对 → 审核通过 → 已打款），未完成的节点以灰色待办显示。</li>
+      <li><b>业务事实核对卡</b>：已核对的显示核对人与核对意见；未核对的明确写「以周敏的核对结论为准，核对完成前金额与状态仅供参考」。</li>
+      <li>单据信息（单号可复制、类型、金额、提交人、提交时间、事由）。</li>
+      <li>自动关联<b>适用制度</b>（按费用类型匹配），一键跳到现行有效原文。</li>
+    </ul>
+
+    <h3>周敏的业务事实核对台</h3>
+    <ul>
+      <li>待核对队列 / 待打款 / 全部单据三个视图，带数量统计。</li>
+      <li>核对弹层里同时给出<b>制度参考</b>（乔姐维护的对应制度摘要，可点开原文）——制度口径与业务事实在这里对照。</li>
+      <li>四项核对要点逐项确认：金额与发票一致无涂改、事由与实际业务相符、未超制度上限、凭证材料齐全。</li>
+      <li>填写核对意见 →「核对通过」推进为已通过；「驳回」必须写具体原因，员工在单据详情能看到。</li>
+      <li>已通过的单据可「标记已打款」，状态变为已打款并记录流转。</li>
+    </ul>
+  </div>
+
+  <h2>四、内置的现行有效制度</h2>
+  <div class="card">
+    <p>下面 5 部是程序内置的示例制度，用来跑通流程。<b>请对照青禾的实际制度核对一遍</b>——换成真制度后，问答口径就准了（用乔姐身份进制度维护台改，或直接告诉我，我来改）。</p>
+    <table>
+      <thead><tr><th>编号</th><th>制度名称</th><th>版本</th><th>分类</th><th>生效日期</th><th>条款</th></tr></thead>
+      <tbody>
+        <tr><td>QH-CW-001</td><td>差旅费报销制度</td><td><span class="tag t-brand">v3.2</span></td><td>差旅管理</td><td>2026-01-01</td><td>4 条</td></tr>
+        <tr><td>QH-CW-002</td><td>市内交通与通勤补贴制度</td><td><span class="tag t-brand">v2.0</span></td><td>交通补贴</td><td>2025-07-01</td><td>3 条</td></tr>
+        <tr><td>QH-CW-003</td><td>业务招待费管理制度</td><td><span class="tag t-brand">v1.4</span></td><td>业务招待</td><td>2025-09-01</td><td>4 条</td></tr>
+        <tr><td>QH-CW-004</td><td>办公用品及设备采购报销制度</td><td><span class="tag t-brand">v2.1</span></td><td>采购管理</td><td>2025-05-15</td><td>3 条</td></tr>
+        <tr><td>QH-CW-005</td><td>报销单据提交规范</td><td><span class="tag t-brand">v1.1</span></td><td>单据规范</td><td>2025-03-01</td><td>4 条</td></tr>
+        <tr><td>QH-CW-001</td><td>差旅费报销制度（历史版）</td><td><span class="tag t-grey">v2.8</span></td><td>差旅管理</td><td>2024-01-01 起 / 2025-12-31 止</td><td>2 条</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px;color:#8A9A96;font-size:13px">最后一部是<b>已失效</b>的历史版本，专门用来验证「只认现行有效制度」：问「住宿费每晚上限是 400 元吗」，助手会答 v3.2 的分档标准（500/400/300），不会拿 400 元的旧口径糊弄。</p>
+
+    <h3>单据流转节点</h3>
+    <div class="flow">
+      <span class="step on">提交申请</span><span class="arrow">›</span>
+      <span class="step on">部门审核</span><span class="arrow">›</span>
+      <span class="step on">财务核对</span><span class="arrow">›</span>
+      <span class="step on">审核通过</span><span class="arrow">›</span>
+      <span class="step on">已打款</span>
+      <span style="color:#B6C3C0">／</span>
+      <span class="step" style="color:#C0392B;border-color:#F0C9C2;background:#FBEBE8">已驳回（异常分支）</span>
+    </div>
+  </div>
+
+  <h2>五、怎么打开来体验</h2>
+  <div class="card">
+    <p>项目就是一个完整的微信小程序工程，目录在：</p>
+    <p><code>qinghe-reimbursement-miniprogram/</code></p>
+    <h3>想现在就看到界面</h3>
+    <p>用<b>微信开发者工具</b>打开这个目录（导入项目，AppID 选「测试号」即可），编译后就能在模拟器里点。</p>
+    <h3>想真切体验三种角色</h3>
+    <ul>
+      <li>底部「我的」→「体验身份」→ 一键切换到 <b>乔姐（行政专员）</b>：看制度维护台。</li>
+      <li>切到 <b>周敏（财务专员）</b>：看业务事实核对台，把待核对单据跑一遍。</li>
+      <li>切回员工：在「单据」里载入示例单据，看进度与核对标记。</li>
+      <li>「我的」→「重置演示数据」可以随时恢复到初始状态重跑一遍。</li>
+    </ul>
+    <h3>想真实登录、多端共享、发布上线</h3>
+    <p>需要用云服务（真实微信登录 / 云端数据库 / 大模型问答）。开启后我会把数据层换成云端表结构，并按角色写行级权限：制度公开可读、只有行政专员能维护；单据本人可见、财务专员可核对。页面代码不需要重写。</p>
+  </div>
+
+  <h2>六、本次交付的验证情况</h2>
+  <div class="card">
+    <div class="notice notice-ok">
+      <i>✓</i>
+      <div>结构自检与逻辑冒烟测试共 <b>42 项全部通过</b>：页面清单完整、组件懒加载已配置、事件处理函数齐备、无 HTML 标签混用。</div>
+    </div>
+    <h3>重点验证过的行为</h3>
+    <ul>
+      <li>制度问答 6 个高频问题全部命中正确条款；失效版本不参与作答。</li>
+      <li>制度未覆盖的问题（如「公司年会抽奖的奖品能报销吗」）不会被硬答，会引导找乔姐。</li>
+      <li>员工看不到任何他人单据，按 id 直访也被拒绝；财务专员可读全部。</li>
+      <li>员工不能核对业务事实、不能新增或停用制度；乔姐不能替周敏核对。</li>
+      <li>周敏核对通过 → 状态推进为「已通过」并写入流转记录；驳回 → 状态变「已驳回」。</li>
+      <li>乔姐新发布的制度<b>立刻</b>可被问答检索到；停用后立即不再被采用。</li>
+      <li>工号绑定：CW-0001 → 财务专员，QG-0001 → 行政专员，其他格式正确的工号 → 普通员工，格式错误会被拒。</li>
+    </ul>
+    <div class="notice">
+      <i>!</i>
+      <div>以上验证在 Node 环境下用内存桩跑通了业务逻辑与权限规则；小程序界面需要在微信开发者工具或真机里编译后才能看到。云端登录、云端数据落库这类依赖云服务的能力，本次未启用，因此也没有验证。</div>
+    </div>
+  </div>
+
+  <footer>青禾报销助手 · 本地体验模式 · 制度口径由行政专员乔姐维护，业务事实由财务专员周敏核对</footer>
+</div>
+
+</body>
+</html>

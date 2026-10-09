@@ -1,0 +1,212 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #F2F6F5;
+}
+
+/* ---------- 顶部说明条 ---------- */
+.ask-top {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: #FFFFFF;
+  padding: 20rpx 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(20, 60, 50, 0.05);
+  flex-shrink: 0;
+}
+
+.top-action {
+  font-size: 24rpx;
+  color: #1F8A70;
+  background: #EAF5F1;
+  border-radius: 100rpx;
+  padding: 8rpx 22rpx;
+}
+
+/* ---------- 消息区 ---------- */
+.chat {
+  flex: 1;
+  overflow: hidden;
+}
+
+.chat-inner {
+  padding: 26rpx 28rpx 0;
+}
+
+.chat-pad {
+  height: 40rpx;
+}
+
+.msg-user {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30rpx;
+}
+
+.bubble-user {
+  max-width: 78%;
+  background: #1F8A70;
+  color: #FFFFFF;
+  padding: 22rpx 26rpx;
+  border-radius: 22rpx 22rpx 6rpx 22rpx;
+  font-size: 28rpx;
+  line-height: 1.65;
+}
+
+.msg-bot {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 34rpx;
+  align-items: flex-start;
+}
+
+.bot-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 20rpx;
+  background: #E3F2EE;
+  color: #1F8A70;
+  font-size: 28rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bot-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.bubble-bot {
+  background: #FFFFFF;
+  border-radius: 6rpx 22rpx 22rpx 22rpx;
+  padding: 24rpx 26rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: #1C2B28;
+  box-shadow: 0 4rpx 18rpx rgba(31, 138, 112, 0.07);
+}
+
+.bubble-miss {
+  background: #FFFBF3;
+  border: 2rpx solid #F3E2C6;
+}
+
+/* ---------- 引用卡 ---------- */
+.cite-card {
+  background: #FFFFFF;
+  border-radius: 18rpx;
+  padding: 22rpx 24rpx;
+  margin-top: 16rpx;
+  border-left: 8rpx solid #1F8A70;
+  box-shadow: 0 4rpx 16rpx rgba(31, 138, 112, 0.06);
+}
+
+.cite-secondary {
+  border-left-color: #C6D3D0;
+  background: #FAFCFB;
+}
+
+.consulted {
+  font-size: 22rpx;
+  color: #8A9A96;
+  line-height: 1.7;
+  margin-top: 16rpx;
+  padding-left: 4rpx;
+}
+
+/* ---------- 建议追问 ---------- */
+.sug-box {
+  background: #FFFFFF;
+  border-radius: 18rpx;
+  padding: 22rpx 24rpx;
+  margin-top: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(31, 138, 112, 0.06);
+}
+
+.sug-item {
+  font-size: 26rpx;
+  color: #1F8A70;
+  padding: 16rpx 0;
+  border-bottom: 2rpx solid #F3F7F6;
+}
+
+.sug-item:last-child {
+  border-bottom: none;
+  padding-bottom: 4rpx;
+}
+
+/* ---------- 转人工卡 ---------- */
+.hand-card {
+  background: #FFFFFF;
+  border-radius: 18rpx;
+  padding: 24rpx;
+  margin-top: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(31, 138, 112, 0.06);
+}
+
+.hand-avatar {
+  width: 68rpx;
+  height: 68rpx;
+  font-size: 28rpx;
+}
+
+.mini-action {
+  font-size: 24rpx;
+  color: #1F8A70;
+  background: #EAF5F1;
+  border-radius: 100rpx;
+  padding: 8rpx 24rpx;
+}
+
+/* ---------- 输入栏 ---------- */
+.ask-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: #FFFFFF;
+  padding: 18rpx 28rpx calc(18rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(20, 60, 50, 0.06);
+  flex-shrink: 0;
+}
+
+.ask-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #F2F6F5;
+  border-radius: 100rpx;
+  padding: 0 24rpx;
+  height: 76rpx;
+}
+
+.ask-input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.clear-btn {
+  font-size: 24rpx;
+  color: #A6B4B0;
+  padding-left: 12rpx;
+}
+
+.send-btn {
+  background: #1F8A70;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 100rpx;
+  padding: 0 32rpx;
+  height: 76rpx;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.send-btn-off {
+  background: #BFD6D0;
+}

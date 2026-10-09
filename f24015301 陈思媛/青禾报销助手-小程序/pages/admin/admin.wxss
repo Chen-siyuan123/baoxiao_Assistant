@@ -1,0 +1,95 @@
+.adm-head {
+  background: linear-gradient(160deg, #1F8A70 0%, #2AA383 100%);
+  padding: 40rpx 32rpx 36rpx;
+  color: #FFFFFF;
+}
+
+.adm-stats {
+  display: flex;
+  align-items: stretch;
+  margin-top: 30rpx;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 20rpx;
+  padding: 22rpx 10rpx;
+}
+
+.adm-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adm-stat-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.adm-stat-label {
+  font-size: 21rpx;
+  color: rgba(255, 255, 255, 0.78);
+  margin-top: 6rpx;
+}
+
+.adm-stat-divider {
+  width: 2rpx;
+  background: rgba(255, 255, 255, 0.22);
+  margin: 6rpx 0;
+}
+
+/* ---------- 制度管理条目 ---------- */
+.adm-item {
+  margin-top: 20rpx;
+}
+
+.act-row {
+  flex-wrap: wrap;
+}
+
+.act-btn {
+  font-size: 24rpx;
+  color: #1F8A70;
+  background: #EAF5F1;
+  border-radius: 100rpx;
+  padding: 10rpx 26rpx;
+}
+
+.act-btn:active {
+  opacity: 0.8;
+}
+
+.act-danger {
+  color: #C0392B;
+  background: #FBEBE8;
+}
+
+/* ---------- 表单 ---------- */
+.textarea {
+  min-height: 130rpx;
+  line-height: 1.7;
+  width: 100%;
+}
+
+.clause-editor {
+  background: #F7FAF9;
+  border-radius: 18rpx;
+  padding: 22rpx;
+  margin-top: 20rpx;
+  border: 2rpx solid #E7F0EE;
+}
+
+.clause-no-input {
+  width: 130rpx;
+  flex-shrink: 0;
+}
+
+.mini-link {
+  font-size: 24rpx;
+  color: #1F8A70;
+}
+
+.mini-link-danger {
+  color: #C0392B;
+}

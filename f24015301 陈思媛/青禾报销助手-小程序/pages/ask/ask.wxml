@@ -1,0 +1,154 @@
+<view class="ask-top">
+  <view class="flex-1">
+    <view class="t-sm t-bold">制度问答</view>
+    <view class="t-xs t-muted mt-8">只依据现行有效制度作答 · 当前 {{policyCount}} 部</view>
+  </view>
+  <view class="top-action" bindtap="onToggleHistory">留痕</view>
+  <view class="top-action" bindtap="onResetChat">重开</view>
+</view>
+
+<scroll-view
+  class="chat"
+  scroll-y
+  scroll-into-view="{{scrollInto}}"
+  scroll-with-animation
+  enable-flex
+>
+  <view class="chat-inner">
+    <block wx:for="{{messages}}" wx:key="id">
+      <view id="anchor-{{item.id}}">
+
+        <view wx:if="{{item.role === 'user'}}" class="msg-user">
+          <view class="bubble-user pre-wrap">{{item.text}}</view>
+        </view>
+
+        <view wx:else class="msg-bot">
+          <view class="bot-avatar">青</view>
+          <view class="bot-body">
+            <view class="bubble-bot {{item.matched ? '' : 'bubble-miss'}}">
+              <text class="t-md pre-wrap">{{item.text}}</text>
+            </view>
+
+            <view
+              wx:for="{{item.citations}}"
+              wx:for-item="cit"
+              wx:key="clauseNo"
+              class="cite-card"
+              hover-class="card-press"
+              bindtap="goPolicyDetail"
+              data-id="{{cit.policyId}}"
+            >
+              <view class="row-between">
+                <text class="t-sm t-bold flex-1 ellipsis">《{{cit.policyTitle}}》第 {{cit.clauseNo}} 条</text>
+                <text class="tag tag-brand">现行有效</text>
+              </view>
+              <view class="t-xs t-muted mt-8">{{cit.code}} · {{cit.version}} · {{cit.effectiveDate}} 起生效</view>
+              <view class="t-xs t-sub clamp-3 mt-8">{{cit.clauseText}}</view>
+              <view class="dashed-divider"></view>
+              <view class="row-between">
+                <text class="t-xs t-muted">口径维护：{{cit.maintainer}}（{{cit.maintainerRole}}）</text>
+                <text class="t-xs t-brand">查看全文 ›</text>
+              </view>
+            </view>
+
+            <view
+              wx:for="{{item.extra}}"
+              wx:for-item="cit"
+              wx:key="clauseNo"
+              class="cite-card cite-secondary"
+              hover-class="card-press"
+              bindtap="goPolicyDetail"
+              data-id="{{cit.policyId}}"
+            >
+              <view class="t-xs t-muted">相关条款</view>
+              <view class="t-sm t-bold mt-8">《{{cit.policyTitle}}》第 {{cit.clauseNo}} 条 · {{cit.clauseTitle}}</view>
+              <view class="t-xs t-sub clamp-2 mt-8">{{cit.clauseText}}</view>
+            </view>
+
+            <view wx:if="{{item.consulted}}" class="consulted">{{item.consulted}}</view>
+
+            <view wx:if="{{item.suggestions.length > 0}}" class="sug-box">
+              <view class="t-xs t-muted">换个说法试试</view>
+              <view
+                wx:for="{{item.suggestions}}"
+                wx:for-item="sq"
+                wx:key="*this"
+                class="sug-item"
+                hover-class="card-press"
+                bindtap="onAskHot"
+                data-q="{{sq}}"
+              >{{sq}}</view>
+            </view>
+
+            <view wx:if="{{item.handwritten}}" class="hand-card">
+              <view class="row gap-16">
+                <view class="avatar-round avatar-round-blue hand-avatar">乔</view>
+                <view class="flex-1">
+                  <view class="t-sm t-bold">{{item.handwritten}}</view>
+                  <view class="t-xs t-muted mt-8">乔姐 · 行政专员 · 制度口径维护人</view>
+                </view>
+              </view>
+            </view>
+
+            <view wx:if="{{item.citations.length > 0}}" class="row gap-20 mt-12">
+              <text class="mini-action" bindtap="copyAnswer" data-id="{{item.id}}">复制答案</text>
+            </view>
+          </view>
+        </view>
+
+      </view>
+    </block>
+
+    <view class="chat-pad"></view>
+  </view>
+</scroll-view>
+
+<view class="ask-bar">
+  <view class="ask-input-wrap">
+    <input
+      class="ask-input"
+      placeholder="例如：出差住宿一晚能报多少"
+      placeholder-class="input-placeholder"
+      value="{{input}}"
+      bindinput="onInput"
+      bindconfirm="onSend"
+      confirm-type="send"
+      adjust-position
+    />
+    <text wx:if="{{input}}" class="clear-btn" bindtap="onClearInput">✕</text>
+  </view>
+  <view class="send-btn {{input ? '' : 'send-btn-off'}}" bindtap="onSend">发送</view>
+</view>
+
+<view wx:if="{{showHistory}}" class="mask" bindtap="onToggleHistory"></view>
+<view wx:if="{{showHistory}}" class="sheet">
+  <view class="sheet-head row-between">
+    <view>
+      <view class="t-lg t-bold">问答留痕</view>
+      <view class="t-xs t-muted mt-8">只保留在本人名下，用于回看与核对出处</view>
+    </view>
+    <text class="t-sm t-danger" bindtap="onClearHistory">清空</text>
+  </view>
+  <scroll-view class="sheet-body" scroll-y>
+    <view wx:if="{{history.length === 0}}" class="empty">
+      <view class="empty-desc">还没有提问记录</view>
+    </view>
+    <view
+      wx:for="{{history}}"
+      wx:key="id"
+      class="list-row"
+      hover-class="card-press"
+      bindtap="onRecall"
+      data-q="{{item.question}}"
+    >
+      <view class="flex-1">
+        <view class="t-md ellipsis">{{item.question}}</view>
+        <view class="row gap-12 mt-8">
+          <text class="t-xs t-muted">{{item.at}}</text>
+          <text class="t-xs {{item.matched ? 't-brand' : 't-warn'}}">{{item.matched ? '已命中制度' : '未命中'}}</text>
+        </view>
+      </view>
+      <view class="chev"></view>
+    </view>
+  </scroll-view>
+</view>

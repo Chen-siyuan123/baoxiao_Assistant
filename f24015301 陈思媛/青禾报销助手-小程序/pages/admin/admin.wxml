@@ -1,0 +1,174 @@
+<view wx:if="{{!isAdmin}}" class="page-body">
+  <view class="card">
+    <view class="empty">
+      <view class="empty-title">这里只有行政专员可以进入</view>
+      <view class="empty-desc">
+        制度口径由行政专员乔姐统一维护，避免出现多份互相冲突的版本。
+        如果你需要新增或调整制度，请联系乔姐。
+      </view>
+    </view>
+  </view>
+</view>
+
+<block wx:else>
+  <view class="adm-head">
+    <view class="hero-title">制度维护台</view>
+    <view class="hero-sub">{{identity.name}} · 行政专员 · 制度口径维护人</view>
+    <view class="adm-stats">
+      <view class="adm-stat">
+        <text class="adm-stat-num">{{activeCount}}</text>
+        <text class="adm-stat-label">现行有效</text>
+      </view>
+      <view class="adm-stat-divider"></view>
+      <view class="adm-stat">
+        <text class="adm-stat-num">{{archivedCount}}</text>
+        <text class="adm-stat-label">失效 / 待生效</text>
+      </view>
+      <view class="adm-stat-divider"></view>
+      <view class="adm-stat">
+        <text class="adm-stat-num">{{list.length}}</text>
+        <text class="adm-stat-label">全部留档</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="page-body">
+    <view class="notice mt-8">
+      <text class="notice-icon">i</text>
+      <view class="flex-1">
+        改版请用「发布新版」而不是直接改旧条款：新版生效后，旧版会自动转为已失效并留档，员工问答始终只采用现行有效版本。
+      </view>
+    </view>
+
+    <view class="btn btn-primary mt-20" bindtap="openCreate">＋ 新增制度</view>
+
+    <view class="section-title">
+      全部制度
+      <text class="sub">共 {{list.length}} 部</text>
+    </view>
+
+    <view wx:for="{{list}}" wx:key="id" class="card adm-item">
+      <view class="row-between">
+        <text class="t-lg t-bold flex-1 ellipsis">{{item.title}}</text>
+        <text class="tag {{item.statusTag}}">{{item.statusLabel}}</text>
+      </view>
+
+      <view class="row gap-8 mt-12 tags-wrap">
+        <text class="tag tag-grey">{{item.code}}</text>
+        <text class="tag tag-grey">{{item.version}}</text>
+        <text class="tag tag-grey">{{item.category}}</text>
+      </view>
+
+      <view class="t-xs t-muted mt-12">
+        {{item.effectiveDate}} 起生效{{item.expireDate ? ' · 失效 ' + item.expireDate : ''}} · {{item.clauseCount}} 条条款 · {{item.updatedLabel}}更新
+      </view>
+
+      <view class="dashed-divider"></view>
+
+      <view class="row gap-16 act-row">
+        <view class="act-btn" bindtap="openEditById" data-id="{{item.id}}">编辑</view>
+        <view class="act-btn" bindtap="onPublishNewVersion" data-id="{{item.id}}">发布新版</view>
+        <view class="act-btn" bindtap="goPreview" data-id="{{item.id}}">预览</view>
+        <view class="act-btn act-danger" bindtap="onArchive" data-id="{{item.id}}">停用</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑 / 新增弹层 -->
+  <view wx:if="{{showEdit}}" class="mask" bindtap="closeEdit"></view>
+  <view wx:if="{{showEdit}}" class="sheet">
+    <view class="sheet-head row-between">
+      <view>
+        <view class="t-lg t-bold">{{f.id ? '编辑制度' : (isNewVersion ? '发布新版' : '新增制度')}}</view>
+        <view class="t-xs t-muted mt-8">{{isNewVersion ? '保存后，旧版本将自动转为已失效' : '维护人会记录为当前身份'}}</view>
+      </view>
+    </view>
+
+    <scroll-view class="sheet-body" scroll-y>
+      <view class="field-label field-required">制度名称</view>
+      <input class="input" value="{{f.title}}" bindinput="onFormInput" data-key="title" placeholder="如：差旅费报销制度" placeholder-class="input-placeholder" />
+
+      <view class="row gap-20 mt-28">
+        <view class="flex-1">
+          <view class="field-label">制度编号</view>
+          <input class="input" value="{{f.code}}" bindinput="onFormInput" data-key="code" placeholder="QH-CW-001" placeholder-class="input-placeholder" />
+        </view>
+        <view class="flex-1">
+          <view class="field-label">版本号</view>
+          <input class="input" value="{{f.version}}" bindinput="onFormInput" data-key="version" placeholder="v1.0" placeholder-class="input-placeholder" />
+        </view>
+      </view>
+
+      <view class="row gap-20 mt-28">
+        <view class="flex-1">
+          <view class="field-label">制度分类</view>
+          <picker mode="selector" range="{{categories}}" bindchange="onCategoryChange">
+            <view class="picker-box">{{f.category}}</view>
+          </picker>
+        </view>
+        <view class="flex-1">
+          <view class="field-label">制度状态</view>
+          <picker mode="selector" range="{{statusOptions}}" range-key="label" value="{{statusIndex}}" bindchange="onStatusChange">
+            <view class="picker-box">{{statusOptions[statusIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="row gap-20 mt-28">
+        <view class="flex-1">
+          <view class="field-label field-required">生效日期</view>
+          <picker mode="date" value="{{f.effectiveDate}}" bindchange="onDateChange" data-key="effectiveDate">
+            <view class="picker-box">{{f.effectiveDate || '请选择'}}</view>
+          </picker>
+        </view>
+        <view class="flex-1">
+          <view class="field-label">失效日期</view>
+          <picker mode="date" value="{{f.expireDate || f.effectiveDate}}" bindchange="onDateChange" data-key="expireDate">
+            <view class="picker-box">{{f.expireDate || '不设定'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view wx:if="{{f.expireDate}}" class="row gap-16 mt-12">
+        <text class="mini-link" bindtap="onClearExpire">清除失效日期</text>
+      </view>
+
+      <view class="field-label mt-28">适用说明</view>
+      <textarea class="input textarea" value="{{f.summary}}" bindinput="onFormInput" data-key="summary" placeholder="一句话说明这部制度管什么" placeholder-class="input-placeholder" auto-height />
+
+      <view class="section-title">
+        条款
+        <text class="sub">共 {{clauses.length}} 条 · 关键词用于问答检索</text>
+      </view>
+
+      <view wx:for="{{clauses}}" wx:key="key" class="clause-editor">
+        <view class="row-between">
+          <text class="t-sm t-bold">第 {{index + 1}} 条</text>
+          <text wx:if="{{clauses.length > 1}}" class="mini-link mini-link-danger" bindtap="removeClause" data-idx="{{index}}">删除</text>
+        </view>
+
+        <view class="row gap-16 mt-12">
+          <view class="clause-no-input">
+            <input class="input" value="{{item.no}}" bindinput="onClauseInput" data-idx="{{index}}" data-key="no" placeholder="3.1" placeholder-class="input-placeholder" />
+          </view>
+          <view class="flex-1">
+            <input class="input" value="{{item.title}}" bindinput="onClauseInput" data-idx="{{index}}" data-key="title" placeholder="条款标题，如：住宿费标准" placeholder-class="input-placeholder" />
+          </view>
+        </view>
+
+        <textarea class="input textarea mt-12" value="{{item.text}}" bindinput="onClauseInput" data-idx="{{index}}" data-key="text" placeholder="条款正文" placeholder-class="input-placeholder" auto-height />
+
+        <input class="input mt-12" value="{{item.keywordsText}}" bindinput="onClauseInput" data-idx="{{index}}" data-key="keywordsText" placeholder="检索关键词，用顿号分隔，如：住宿、酒店、上限" placeholder-class="input-placeholder" />
+      </view>
+
+      <view class="btn btn-primary-plain btn-sm mt-20" bindtap="addClause">＋ 添加条款</view>
+
+      <view class="field-label mt-28">修订说明</view>
+      <textarea class="input textarea" value="{{f.revisionNote}}" bindinput="onFormInput" data-key="revisionNote" placeholder="本次改了什么、为什么改，便于员工理解口径变化" placeholder-class="input-placeholder" auto-height />
+    </scroll-view>
+
+    <view class="sheet-foot">
+      <view class="btn btn-quiet flex-1" bindtap="closeEdit">取消</view>
+      <view class="btn btn-primary flex-1" bindtap="save">{{isNewVersion ? '发布新版' : '保存'}}</view>
+    </view>
+  </view>
+</block>

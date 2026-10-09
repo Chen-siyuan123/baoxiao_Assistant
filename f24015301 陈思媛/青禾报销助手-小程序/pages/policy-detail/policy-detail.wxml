@@ -1,0 +1,107 @@
+<view wx:if="{{!policy}}" class="page-body">
+  <view class="card">
+    <view class="empty">
+      <view class="empty-title">未找到这部制度</view>
+      <view class="empty-desc">它可能已被撤下或链接失效，请回到制度库重新选择。</view>
+    </view>
+  </view>
+</view>
+
+<block wx:else>
+  <view class="pd-head">
+    <view class="pd-title">{{policy.title}}</view>
+    <view class="row gap-8 mt-16 tags-wrap">
+      <text class="tag {{policy.statusTag}}">{{policy.statusLabel}}</text>
+      <text class="tag tag-grey">{{policy.code}}</text>
+      <text class="tag tag-grey">{{policy.version}}</text>
+      <text class="tag tag-grey">{{policy.category}}</text>
+    </view>
+    <view class="pd-summary">{{policy.summary}}</view>
+  </view>
+
+  <view class="page-body pb-bar">
+    <view wx:if="{{isArchived}}" class="notice notice-warn">
+      <text class="notice-icon">!</text>
+      <view class="flex-1">
+        这是已失效的历史版本，不能作为报销依据。请到制度库查看现行有效版本，或让乔姐确认当前口径。
+      </view>
+    </view>
+
+    <view class="card mt-20">
+      <view class="meta-grid">
+        <view class="meta-cell">
+          <text class="meta-label">生效日期</text>
+          <text class="meta-value">{{policy.effectiveDate}}</text>
+        </view>
+        <view class="meta-cell">
+          <text class="meta-label">失效日期</text>
+          <text class="meta-value">{{policy.expireDate || '未设定'}}</text>
+        </view>
+        <view class="meta-cell">
+          <text class="meta-label">维护人</text>
+          <text class="meta-value">{{policy.maintainer}}（{{policy.maintainerRole}}）</text>
+        </view>
+        <view class="meta-cell">
+          <text class="meta-label">最近更新</text>
+          <text class="meta-value">{{policy.updatedLabel}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">
+      制度条款
+      <text class="sub">共 {{policy.clauses.length}} 条</text>
+    </view>
+
+    <view class="card">
+      <view wx:for="{{policy.clauses}}" wx:key="no" class="clause {{index === policy.clauses.length - 1 ? 'clause-last' : ''}}">
+        <view class="row gap-12">
+          <text class="clause-no">{{item.no}}</text>
+          <text class="t-md t-bold flex-1">{{item.title}}</text>
+        </view>
+        <view class="t-md t-sub pre-wrap mt-8">{{item.text}}</view>
+      </view>
+    </view>
+
+    <block wx:if="{{policy.revisionNote}}">
+      <view class="section-title">修订说明</view>
+      <view class="card">
+        <text class="t-sm t-sub pre-wrap">{{policy.revisionNote}}</text>
+      </view>
+    </block>
+
+    <view class="section-title">口径责任</view>
+    <view class="card">
+      <view class="row gap-20">
+        <view class="avatar-round">乔</view>
+        <view class="flex-1">
+          <view class="t-md t-bold">制度口径由 {{policy.maintainer}} 维护</view>
+          <view class="t-sm t-muted mt-8">行政专员，负责本制度的制定、改版与停用。</view>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="t-sm t-sub pre-wrap">本助手只检索并呈现制度原文，不修改制度口径。如果你对条款本身有疑问、或认为制度需要调整，请找乔姐确认；涉及单据金额与凭证的认定，以财务专员周敏的核对结论为准。</view>
+    </view>
+
+    <view class="section-title">就这条制度提问</view>
+    <view class="card">
+      <view
+        wx:for="{{relatedQuestions}}"
+        wx:key="*this"
+        class="hot-q"
+        hover-class="card-press"
+        bindtap="onAskRelated"
+        data-q="{{item}}"
+      >
+        <text class="hot-q-mark">Q</text>
+        <text class="flex-1 t-md">{{item}}</text>
+        <view class="chev"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="btn btn-ghost flex-1" bindtap="goAskPolicy">就这条提问</view>
+    <view wx:if="{{isAdmin}}" class="btn btn-primary flex-1" bindtap="goAdminEdit">编辑制度</view>
+  </view>
+</block>

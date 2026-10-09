@@ -1,0 +1,197 @@
+<view wx:if="{{!canVerify}}" class="page-body">
+  <view class="card">
+    <view class="empty">
+      <view class="empty-title">这里只有财务专员可以进入</view>
+      <view class="empty-desc">
+        单据的业务事实（金额、事由、凭证）由财务专员周敏统一核对，其他角色不能代替认定。
+        如果你需要核对结论，请找周敏确认。
+      </view>
+    </view>
+  </view>
+</view>
+
+<block wx:else>
+  <view class="fin-head">
+    <view class="hero-title">业务事实核对台</view>
+    <view class="hero-sub">{{identity.name}} · 财务专员 · 业务事实核对人</view>
+    <view class="fin-stats">
+      <view class="fin-stat">
+        <text class="fin-stat-num">{{counts.pending}}</text>
+        <text class="fin-stat-label">待核对</text>
+      </view>
+      <view class="fin-stat-divider"></view>
+      <view class="fin-stat">
+        <text class="fin-stat-num">{{counts.approved}}</text>
+        <text class="fin-stat-label">待打款</text>
+      </view>
+      <view class="fin-stat-divider"></view>
+      <view class="fin-stat">
+        <text class="fin-stat-num">{{counts.all}}</text>
+        <text class="fin-stat-label">全部单据</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="filter-wrap">
+    <scroll-view class="chips" scroll-x enable-flex show-scrollbar="{{false}}">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="key"
+        class="chip {{tab === item.key ? 'chip-on' : ''}}"
+        bindtap="onPickTab"
+        data-key="{{item.key}}"
+      >{{item.label}}</view>
+    </scroll-view>
+  </view>
+
+  <view class="page-body">
+    <view class="notice mt-8">
+      <text class="notice-icon">i</text>
+      <view class="flex-1">
+        你核对的是业务事实：金额、事由与凭证是否真实、合规、与制度相符。制度口径由行政专员乔姐维护，核对页会同时给出对应制度供你对照。
+      </view>
+    </view>
+
+    <view wx:for="{{list}}" wx:key="id" class="card fin-item">
+      <view class="row-between">
+        <view class="row gap-12 flex-1">
+          <text class="tag tag-grey">{{item.docType}}</text>
+          <text class="t-sm t-bold">{{item.ownerName}}</text>
+          <text class="t-xs t-muted">{{item.ownerDept}}</text>
+        </view>
+        <text class="tag {{item.statusTag}}">{{item.statusLabel}}</text>
+      </view>
+
+      <view class="row-between mt-16">
+        <text class="fin-amount amount">¥{{item.amountText}}</text>
+        <text class="t-xs t-muted">{{item.submittedLabel}}</text>
+      </view>
+
+      <view class="t-sm t-sub clamp-2 mt-12">{{item.reason}}</view>
+
+      <view class="t-xs t-muted mt-12">{{item.docNo}} · {{item.ownerEmployeeNo}}</view>
+
+      <view wx:if="{{item.factVerified}}" class="dashed-divider"></view>
+      <view wx:if="{{item.factVerified}}" class="t-xs t-brand">已由{{item.verifiedBy}}核对：{{item.verifyNote}}</view>
+
+      <view class="divider"></view>
+      <view class="row gap-16 act-row">
+        <view wx:if="{{item.needsVerify}}" class="act-btn act-primary" bindtap="openVerify" data-id="{{item.id}}">核对业务事实</view>
+        <view wx:if="{{item.canPay}}" class="act-btn act-primary" bindtap="onMarkPaid" data-id="{{item.id}}">标记已打款</view>
+        <view class="act-btn" bindtap="goDetail" data-id="{{item.id}}">单据详情</view>
+      </view>
+    </view>
+
+    <view wx:if="{{list.length === 0}}" class="card">
+      <view class="empty">
+        <view class="empty-title">{{tab === 'pending' ? '待核对队列已清空' : '暂无单据'}}</view>
+        <view class="empty-desc">
+          {{tab === 'pending'
+            ? '当前没有等待核对业务事实的单据。可以切到「待打款」继续处理已通过的单据。'
+            : '员工提交报销单据后会自动汇入这里。'}}
+        </view>
+      </view>
+    </view>
+
+    <view class="foot-note">
+      核对结论会同步到员工的单据详情与流转记录。若单据被驳回，员工可在「我的单据」中看到具体原因。
+    </view>
+  </view>
+
+  <!-- 核对弹层 -->
+  <view wx:if="{{showVerify}}" class="mask" bindtap="closeVerify"></view>
+  <view wx:if="{{showVerify}}" class="sheet">
+    <view class="sheet-head">
+      <view class="t-lg t-bold">核对业务事实</view>
+      <view class="t-xs t-muted mt-8">{{current.docNo}} · {{current.docType}} · {{current.ownerName}}</view>
+    </view>
+
+    <scroll-view class="sheet-body" scroll-y>
+      <view class="card card-flat">
+        <view class="row-between">
+          <text class="t-md t-bold">报销金额</text>
+          <text class="fin-amount amount">¥{{current.amountText}}</text>
+        </view>
+        <view class="divider"></view>
+        <view class="t-sm t-sub pre-wrap">{{current.reason}}</view>
+        <view class="dashed-divider"></view>
+        <view class="row-between">
+          <text class="t-xs t-muted">提交人</text>
+          <text class="t-xs t-sub">{{current.ownerName}} · {{current.ownerDept}} · {{current.ownerEmployeeNo}}</text>
+        </view>
+        <view class="row-between mt-12">
+          <text class="t-xs t-muted">提交时间</text>
+          <text class="t-xs t-sub">{{current.submittedAt}}</text>
+        </view>
+      </view>
+
+      <block wx:if="{{policyHint.length > 0}}">
+        <view class="section-title">
+          制度参考
+          <text class="sub">乔姐维护 · 现行有效</text>
+        </view>
+        <view
+          wx:for="{{policyHint}}"
+          wx:key="id"
+          class="card card-flat hint-card"
+          hover-class="card-press"
+          bindtap="goPolicyHint"
+          data-id="{{item.id}}"
+        >
+          <view class="row-between">
+            <text class="t-sm t-bold flex-1 ellipsis">{{item.title}}</text>
+            <text class="tag tag-brand">{{item.version}}</text>
+          </view>
+          <view class="t-xs t-muted mt-8 clamp-2">{{item.summary}}</view>
+        </view>
+      </block>
+
+      <block wx:if="{{!current.factVerified}}">
+        <view class="section-title">
+          核对要点
+          <text class="sub">已确认 {{checkedCount}}/{{checklist.length}}</text>
+        </view>
+        <view class="card card-flat">
+          <view
+            wx:for="{{checklist}}"
+            wx:key="key"
+            class="check-row"
+            bindtap="onToggleCheck"
+            data-key="{{item.key}}"
+          >
+            <view class="checkbox {{item.checked ? 'checkbox-on' : ''}}">
+              <text wx:if="{{item.checked}}">✓</text>
+            </view>
+            <text class="flex-1 t-sm {{item.checked ? 't-main' : 't-sub'}}">{{item.text}}</text>
+          </view>
+        </view>
+
+        <view class="section-title">核对意见</view>
+        <textarea
+          class="input textarea"
+          value="{{verifyNote}}"
+          bindinput="onNoteInput"
+          placeholder="例如：金额与发票一致，采购申请已会签，符合 QH-CW-004 第 4.2 条。"
+          placeholder-class="input-placeholder"
+          auto-height
+        />
+        <view class="t-xs t-muted mt-12">核对通过后，意见会同步展示给员工；若不填写，系统会记录默认核对结论。</view>
+      </block>
+
+      <view wx:else class="notice mt-20">
+        <text class="notice-icon">✓</text>
+        <view class="flex-1">
+          这条单据已由 {{current.verifiedBy}} 核对过业务事实：{{current.verifyNote || '（未填写意见）'}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="sheet-foot">
+      <block wx:if="{{!current.factVerified}}">
+        <view class="btn btn-ghost flex-1" bindtap="onReject">驳回</view>
+        <view class="btn btn-primary flex-1" bindtap="onPass">核对通过</view>
+      </block>
+      <view wx:else class="btn btn-quiet flex-1" bindtap="closeVerify">关闭</view>
+    </view>
+  </view>
+</block>

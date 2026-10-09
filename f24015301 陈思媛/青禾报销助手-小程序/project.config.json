@@ -1,0 +1,32 @@
+{
+  "description": "青禾报销助手 - 员工自助查制度 / 经授权查本人单据",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "appid": "touristappid",
+  "projectname": "qinghe-reimbursement-assistant",
+  "libVersion": "3.5.5",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "checkInvalidKey": true,
+    "uploadWithSourceMap": true,
+    "ignoreDevUnusedFiles": false,
+    "showShadowRootInWxmlPanel": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "condition": {
+    "miniprogram": {
+      "list": []
+    }
+  }
+}

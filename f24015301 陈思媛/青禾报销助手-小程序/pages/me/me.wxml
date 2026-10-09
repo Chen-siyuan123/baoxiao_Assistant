@@ -1,0 +1,173 @@
+<view class="me-head">
+  <view class="row gap-20">
+    <view class="me-avatar">{{identity.name}}</view>
+    <view class="flex-1">
+      <view class="row gap-12">
+        <text class="t-xl t-heavy">{{identity.name}}</text>
+        <text class="tag tag-white">{{roleLabel}}</text>
+      </view>
+      <view class="me-sub">{{identity.dept}} · {{identity.employeeNo}}</view>
+    </view>
+    <view class="me-edit" bindtap="openProfile">编辑</view>
+  </view>
+  <view class="me-roledesc">{{roleDesc}}</view>
+</view>
+
+<view class="page-body">
+  <view class="section-title">
+    我的数据
+    <text class="sub">按角色隔离</text>
+  </view>
+  <view class="card">
+    <view class="row stat-row">
+      <view class="stat-cell" bindtap="goDocs">
+        <text class="stat-num">{{isStaff ? docCount : docCount}}</text>
+        <text class="stat-label">{{isStaff ? '可见单据' : '我的单据'}}</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-cell" bindtap="goPolicy">
+        <text class="stat-num">{{policyCount}}</text>
+        <text class="stat-label">有效制度</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-cell">
+        <text class="stat-num">{{consent && consent.granted ? '已授权' : '未授权'}}</text>
+        <text class="stat-label">单据查询</text>
+      </view>
+    </view>
+  </view>
+
+  <block wx:if="{{isStaff}}">
+    <view class="section-title">
+      我的职责
+      <text class="sub">角色后台</text>
+    </view>
+    <view class="card">
+      <view wx:if="{{isAdmin}}" class="list-row" hover-class="card-press" bindtap="goAdmin">
+        <view class="duty-badge db-green">制</view>
+        <view class="flex-1">
+          <view class="t-md t-bold">制度维护台</view>
+          <view class="t-xs t-muted mt-8">新增制度、发布新版、设定生效日期与停用旧版</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+      <view wx:if="{{isFinance}}" class="list-row" hover-class="card-press" bindtap="goFinance">
+        <view class="duty-badge db-plum">核</view>
+        <view class="flex-1">
+          <view class="t-md t-bold">业务事实核对台</view>
+          <view class="t-xs t-muted mt-8">核对单据金额、事由与凭证，给出核对结论并推进状态</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+    </view>
+  </block>
+
+  <view class="section-title">
+    查询授权
+    <text class="sub">仅限本人单据</text>
+  </view>
+  <view class="card">
+    <view class="row-between">
+      <view class="flex-1">
+        <view class="t-md t-bold">单据查询授权</view>
+        <view class="t-xs t-muted mt-8">
+          {{consent && consent.granted ? '已授权 · ' + consentAt : '未授权，单据进度暂不展示'}}
+        </view>
+      </view>
+      <text class="tag {{consent && consent.granted ? 'tag-brand' : 'tag-grey'}}">
+        {{consent && consent.granted ? '已授权' : '未授权'}}
+      </text>
+    </view>
+    <view class="divider"></view>
+    <view class="t-sm t-sub pre-wrap">授权范围严格限定为你本人名下的单据及其流转记录。助手不会读取他人单据（财务专员核对业务事实的情形除外），不会改动单据内容，也不替代财务对业务事实的认定。</view>
+    <view class="row gap-20 mt-20">
+      <view class="btn btn-ghost btn-sm flex-1" bindtap="onShowConsent">查看授权说明</view>
+      <view wx:if="{{consent && consent.granted}}" class="btn btn-quiet btn-sm flex-1" bindtap="onRevokeConsent">撤回授权</view>
+    </view>
+  </view>
+
+  <view class="section-title">
+    体验身份
+    <text class="sub">本地体验模式</text>
+  </view>
+  <view class="card">
+    <view class="notice">
+      <text class="notice-icon">i</text>
+      <view class="flex-1">
+        当前为本地体验模式：身份与数据保存在本机。你可以一键切换到乔姐、周敏的身份，验证不同角色能看到什么、不能看到什么。
+      </view>
+    </view>
+    <view class="mt-20">
+      <view
+        wx:for="{{demoList}}"
+        wx:key="id"
+        class="list-row"
+        hover-class="card-press"
+        bindtap="onSwitchIdentity"
+        data-id="{{item.id}}"
+      >
+        <view class="avatar-round">{{item.name}}</view>
+        <view class="flex-1 ml-16">
+          <view class="t-md t-bold">{{item.name}}</view>
+          <view class="t-xs t-muted mt-8">{{item.dept}} · {{item.employeeNo}}</view>
+        </view>
+        <text wx:if="{{item.current}}" class="tag tag-brand">当前</text>
+        <view wx:else class="chev"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-title">
+    口径与责任
+    <text class="sub">找对人</text>
+  </view>
+  <view class="card">
+    <view class="row gap-20">
+      <view class="avatar-round avatar-round-blue">乔</view>
+      <view class="flex-1">
+        <view class="t-md t-bold">乔姐 · 行政专员</view>
+        <view class="t-xs t-muted mt-8">制度口径维护人。条款怎么理解、制度要不要调整，找她。</view>
+      </view>
+    </view>
+    <view class="divider"></view>
+    <view class="row gap-20">
+      <view class="avatar-round avatar-round-plum">周</view>
+      <view class="flex-1">
+        <view class="t-md t-bold">周敏 · 财务专员</view>
+        <view class="t-xs t-muted mt-8">业务事实核对人。金额、事由、凭证的认定与单据进度，以她的核对结论为准。</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-title">数据管理</view>
+  <view class="card">
+    <view class="t-sm t-sub pre-wrap">本机保存了制度库、示例单据、问答留痕与授权记录。重置会恢复到初始演示状态，便于重新走一遍流程。</view>
+    <view class="btn btn-quiet btn-sm mt-20" bindtap="onReset">重置演示数据</view>
+  </view>
+
+  <view class="t-xs t-muted row-center mt-36">青禾报销助手 · 本地体验模式</view>
+</view>
+
+<!-- 编辑资料 -->
+<view wx:if="{{showProfile}}" class="mask" bindtap="closeProfile"></view>
+<view wx:if="{{showProfile}}" class="sheet">
+  <view class="sheet-head">
+    <view class="t-lg t-bold">编辑我的资料</view>
+    <view class="t-xs t-muted mt-8">工号填对后，系统会自动匹配你的角色</view>
+  </view>
+  <scroll-view class="sheet-body" scroll-y>
+    <view class="field-label field-required">姓名</view>
+    <input class="input" value="{{form.name}}" bindinput="onFormInput" data-key="name" placeholder="请输入姓名" placeholder-class="input-placeholder" />
+
+    <view class="field-label mt-28">部门</view>
+    <input class="input" value="{{form.dept}}" bindinput="onFormInput" data-key="dept" placeholder="如：市场部" placeholder-class="input-placeholder" />
+
+    <view class="field-label mt-28">工号</view>
+    <input class="input" value="{{form.employeeNo}}" bindinput="onFormInput" data-key="employeeNo" placeholder="如：ZH-1024、QG-0001、CW-0001" placeholder-class="input-placeholder" />
+    <view class="t-xs t-muted mt-12">授权名单内的工号会自动获得对应角色（乔姐 → 行政专员，周敏 → 财务专员）。</view>
+  </scroll-view>
+  <view class="sheet-foot">
+    <view class="btn btn-quiet flex-1" bindtap="closeProfile">取消</view>
+    <view class="btn btn-primary flex-1" bindtap="saveProfile">保存</view>
+  </view>
+</view>

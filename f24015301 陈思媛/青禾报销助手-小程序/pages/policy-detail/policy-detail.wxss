@@ -1,0 +1,77 @@
+.pd-head {
+  background: linear-gradient(160deg, #1F8A70 0%, #2AA383 100%);
+  padding: 40rpx 32rpx 60rpx;
+  color: #FFFFFF;
+}
+
+.pd-title {
+  font-size: 46rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.pd-head .tag {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.pd-summary {
+  font-size: 25rpx;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  margin-top: 20rpx;
+}
+
+/* ---------- 元信息 ---------- */
+.meta-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.meta-cell {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 14rpx 0;
+  box-sizing: border-box;
+}
+
+.meta-label {
+  font-size: 22rpx;
+  color: #8A9A96;
+}
+
+.meta-value {
+  font-size: 27rpx;
+  color: #1C2B28;
+  font-weight: 500;
+  margin-top: 8rpx;
+}
+
+/* ---------- 条款 ---------- */
+.clause {
+  padding-bottom: 30rpx;
+  margin-bottom: 30rpx;
+  border-bottom: 2rpx dashed #E5EDEB;
+}
+
+.clause-last {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.clause-no {
+  min-width: 66rpx;
+  height: 40rpx;
+  padding: 0 12rpx;
+  border-radius: 10rpx;
+  background: #E3F2EE;
+  color: #1F8A70;
+  font-size: 23rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

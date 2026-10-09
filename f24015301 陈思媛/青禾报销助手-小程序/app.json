@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/policy/policy",
+    "pages/ask/ask",
+    "pages/docs/docs",
+    "pages/me/me",
+    "pages/policy-detail/policy-detail",
+    "pages/doc-detail/doc-detail",
+    "pages/admin/admin",
+    "pages/finance/finance"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1F8A70",
+    "navigationBarTitleText": "青禾报销助手",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F2F6F5"
+  },
+  "tabBar": {
+    "color": "#8A9A96",
+    "selectedColor": "#1F8A70",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/policy/policy",
+        "text": "制度"
+      },
+      {
+        "pagePath": "pages/ask/ask",
+        "text": "问答"
+      },
+      {
+        "pagePath": "pages/docs/docs",
+        "text": "单据"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

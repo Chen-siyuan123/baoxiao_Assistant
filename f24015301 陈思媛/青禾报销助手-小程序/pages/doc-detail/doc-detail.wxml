@@ -1,0 +1,128 @@
+<view wx:if="{{!doc}}" class="page-body">
+  <view class="card">
+    <view class="empty">
+      <view class="empty-title">{{denied ? '无权查看这条单据' : '未找到这条单据'}}</view>
+      <view class="empty-desc">
+        {{denied
+          ? '单据查询遵循「仅本人可见」原则，你只能查看自己名下的单据。如果你认为这是误判，请联系财务专员周敏核实。'
+          : '它可能已被撤回或链接失效，请回到单据列表重新选择。'}}
+      </view>
+    </view>
+  </view>
+</view>
+
+<block wx:else>
+  <view class="dd-head">
+    <view class="row gap-12 tags-wrap">
+      <text class="tag tag-white">{{doc.docType}}</text>
+      <text class="tag tag-white">{{doc.statusLabel}}</text>
+    </view>
+    <view class="dd-amount amount">¥{{doc.amountText}}</view>
+    <view class="dd-hint">{{doc.statusHint}}</view>
+  </view>
+
+  <view class="page-body pb-bar">
+    <view class="section-title">
+      流转进度
+      <text class="sub">{{timeline.length}} 个节点</text>
+    </view>
+    <view class="card">
+      <view class="timeline">
+        <view wx:for="{{timeline}}" wx:key="key" class="tl-item">
+          <view class="tl-rail">
+            <view class="tl-dot {{item.type === 'done' ? 'on' : ''}}"></view>
+            <view wx:if="{{index !== timeline.length - 1}}" class="tl-line"></view>
+          </view>
+          <view class="tl-body">
+            <view class="row-between">
+              <text class="t-md {{item.type === 'done' ? 't-bold' : 't-muted'}}">{{item.label}}</text>
+              <text class="t-xs t-muted">{{item.at}}</text>
+            </view>
+            <view wx:if="{{item.actor}}" class="t-xs t-brand mt-8">{{item.actor}}</view>
+            <view wx:if="{{item.note}}" class="t-sm t-sub mt-8">{{item.note}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">业务事实核对</view>
+    <view class="card verify-card {{verifyBlock.state === 'ok' ? 'vc-ok' : verifyBlock.state === 'wait' ? 'vc-wait' : ''}}">
+      <view class="row gap-20">
+        <view class="avatar-round {{verifyBlock.state === 'ok' ? 'avatar-round-plum' : ''}}">周</view>
+        <view class="flex-1">
+          <view class="t-md t-bold">{{verifyBlock.title}}</view>
+          <view class="t-xs t-muted mt-8">
+            {{verifyBlock.state === 'ok' ? verifyBlock.by + ' · ' + verifyBlock.at : '核对人：财务专员 ' + verifyBlock.by}}
+          </view>
+        </view>
+        <text wx:if="{{verifyBlock.state === 'ok'}}" class="tag tag-green">已核对</text>
+        <text wx:elif="{{verifyBlock.state === 'wait'}}" class="tag tag-warn">待核对</text>
+        <text wx:else class="tag tag-grey">未开始</text>
+      </view>
+      <view wx:if="{{verifyBlock.note}}" class="divider"></view>
+      <view wx:if="{{verifyBlock.note}}" class="t-sm t-sub pre-wrap">{{verifyBlock.note}}</view>
+    </view>
+
+    <view class="section-title">单据信息</view>
+    <view class="card">
+      <view class="kv-row">
+        <text class="kv-label">单据编号</text>
+        <view class="row gap-12">
+          <text class="kv-value">{{doc.docNo}}</text>
+          <text class="mini-action" bindtap="copyDocNo">复制</text>
+        </view>
+      </view>
+      <view class="kv-row">
+        <text class="kv-label">费用类型</text>
+        <text class="kv-value">{{doc.docType}}</text>
+      </view>
+      <view class="kv-row">
+        <text class="kv-label">报销金额</text>
+        <text class="kv-value amount">¥{{doc.amountText}}</text>
+      </view>
+      <view class="kv-row">
+        <text class="kv-label">提交人</text>
+        <text class="kv-value">{{doc.ownerName}} · {{doc.ownerDept}} · {{doc.ownerEmployeeNo}}</text>
+      </view>
+      <view class="kv-row">
+        <text class="kv-label">提交时间</text>
+        <text class="kv-value">{{doc.submittedAt}}</text>
+      </view>
+      <view class="kv-row kv-row-last">
+        <text class="kv-label">费用事由</text>
+        <text class="kv-value kv-reason">{{doc.reason}}</text>
+      </view>
+    </view>
+
+    <view class="section-title">
+      适用制度
+      <text class="sub">现行有效版本</text>
+    </view>
+    <view class="card">
+      <view
+        wx:for="{{relatedPolicies}}"
+        wx:key="id"
+        class="list-row"
+        hover-class="card-press"
+        bindtap="goPolicy"
+        data-id="{{item.id}}"
+      >
+        <view class="flex-1">
+          <view class="t-md t-bold ellipsis">{{item.title}}</view>
+          <view class="t-xs t-muted mt-8">{{item.code}} · {{item.version}} · {{item.effectiveDate}} 起生效</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+      <view wx:if="{{relatedPolicies.length === 0}}" class="t-sm t-muted">暂未匹配到对应制度，可到制度库检索。</view>
+    </view>
+
+    <view class="foot-note">
+      本页展示的金额与状态来自系统流转记录；金额、事由与凭证的认定，以财务专员周敏的核对结论为准。
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="btn btn-ghost flex-1" bindtap="goAsk">查相关制度</view>
+    <view wx:if="{{canVerify && !doc.factVerified}}" class="btn btn-primary flex-1" bindtap="goVerify">去核对业务事实</view>
+  </view>
+</block>

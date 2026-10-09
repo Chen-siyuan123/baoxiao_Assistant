@@ -1,0 +1,151 @@
+.pt-0 {
+  padding-top: 0;
+}
+
+/* ---------- 顶部身份胶囊 ---------- */
+.id-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 28rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2rpx solid rgba(255, 255, 255, 0.28);
+  border-radius: 100rpx;
+  padding: 8rpx 22rpx 8rpx 10rpx;
+  position: relative;
+  z-index: 3;
+}
+
+.id-avatar {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #1F8A70;
+  font-size: 22rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 14rpx;
+  overflow: hidden;
+}
+
+.id-text {
+  font-size: 24rpx;
+  color: #FFFFFF;
+}
+
+.id-sep {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 12rpx;
+}
+
+.id-arrow {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.75);
+  margin-left: 8rpx;
+}
+
+/* ---------- 搜索 ---------- */
+.icon-search {
+  width: 26rpx;
+  height: 26rpx;
+  border: 3rpx solid #8A9A96;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.icon-search::after {
+  content: "";
+  position: absolute;
+  width: 3rpx;
+  height: 12rpx;
+  background: #8A9A96;
+  transform: rotate(-45deg);
+  right: -7rpx;
+  bottom: -8rpx;
+  border-radius: 2rpx;
+}
+
+.search-btn {
+  font-size: 25rpx;
+  color: #FFFFFF;
+  background: #1F8A70;
+  border-radius: 100rpx;
+  padding: 8rpx 24rpx;
+  flex-shrink: 0;
+}
+
+/* ---------- 功能格子 ---------- */
+.grid-icon {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.gi-green { background: #E3F2EE; color: #1F8A70; }
+.gi-blue  { background: #E9EFF9; color: #3C63A8; }
+.gi-orange{ background: #FDF1E3; color: #C1701A; }
+.gi-plum  { background: #F0EBF8; color: #6B4FA8; }
+.gi-grey  { background: #EEF2F1; color: #6B7B77; }
+
+/* ---------- 制度卡片 ---------- */
+.policy-card {
+  border-left: 8rpx solid #DCEBE6;
+}
+
+/* ---------- 统计 ---------- */
+.stat-row {
+  align-items: stretch;
+}
+
+.stat-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 0;
+}
+
+.stat-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1C2B28;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 23rpx;
+  color: #8A9A96;
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 2rpx;
+  background: #EFF3F2;
+  margin: 6rpx 0;
+}
+
+/* ---------- 责任说明 ---------- */
+.duty-row {
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+}
+
+.duty-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.db-green { background: #E3F2EE; color: #1F8A70; }
+.db-plum  { background: #F0EBF8; color: #6B4FA8; }
+.db-blue  { background: #E9EFF9; color: #3C63A8; }
